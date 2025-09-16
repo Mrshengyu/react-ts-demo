@@ -1,11 +1,17 @@
-import React, { Component } from 'react'
+import React, { useEffect } from 'react'
 
-export default class Layout extends Component {
-  render() {
-    return (
-      <div>
-        woshi layout
-      </div>
-    )
-  }
+import { request } from '@/utils'
+
+
+
+export default function Layout() {
+  useEffect(() => {
+    request.get('/api/test')
+  }, [])
+  return (
+    <div>
+      woshi layout
+    </div>
+  )
+
 }

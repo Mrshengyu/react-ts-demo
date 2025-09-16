@@ -1,5 +1,6 @@
 //axios的封装，统一处理请求
 import axios from 'axios'
+import { getToken } from '@/utils/token'
 // 1 域名配置
 const baseURL = 'api'
 // 2 创建axios实例
@@ -10,6 +11,12 @@ const request = axios.create({
 // 3 请求拦截器
 request.interceptors.request.use(config => {
   // 在发送请求之前做一些处理
+//   1 获取token
+// 2 按照后端格式做token拼接
+const token = getToken();
+if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+}
   return config
 }, error => {
   // 对请求错误做些什么
