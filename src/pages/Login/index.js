@@ -3,12 +3,22 @@ import logo from '../../assets/images/392.png'
 
 import React, { Component } from 'react'
 import { Card, Form, Input, Button, message } from 'antd'
+import { useDispatch } from 'react-redux'
+import { fetchLogin } from '@/store/modules/user'
 
-export default class Login extends Component {
-  onFinish = values => {
+
+
+
+
+export default function  Login() {
+ const dispatch = useDispatch();
+ const onFinish = values => {
     console.log('Success:', values);
+    //触发异步action fetchLogin
+    dispatch(fetchLogin(values));
+    message.success('登录成功');
+
   };
-  render() {
     return (
       <div className="login">
         <Card className="login-container">
@@ -16,7 +26,7 @@ export default class Login extends Component {
 
           {/* 登录表单 */}
           <Form
-            onFinish={this.onFinish}
+            onFinish={onFinish}
             name="basic"
             validateTrigger="onBlur"
 
@@ -33,7 +43,7 @@ export default class Login extends Component {
             </Form.Item>
             <Form.Item
               label="验证码"
-              name=" cord"
+              name="cord"
               rules={[{ required: true, message: 'Please input your cord!' }]}>
               <Input placeholder="请输入验证码" size='large' />
             </Form.Item>
@@ -46,7 +56,7 @@ export default class Login extends Component {
         </Card>
       </div>
     )
-  }
+  
 
 
 }

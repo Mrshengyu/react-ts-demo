@@ -1,7 +1,7 @@
 //axios的封装，统一处理请求
 import axios from 'axios'
 // 1 域名配置
-const baseURL = 'http://geek.itheimg.net/v1_0'
+const baseURL = 'api'
 // 2 创建axios实例
 const request = axios.create({
   baseURL,
