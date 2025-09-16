@@ -11,18 +11,18 @@ export default function App() {
 
     return (
         <div>
-
-            <ul>
                 {/* 路由链接 */}
+            {/* <ul>
 
                 <li><NavLink to="/about" className={computedClassName}>About</NavLink></li>
                 <li>
                     <NavLink to="/home">Home</NavLink></li>
 
-            </ul>
+            </ul> */}
+                {/* 注册路由*/}
+
 
             <div>
-                {/* 注册路由*/}
                     {element}
 
             </div>
