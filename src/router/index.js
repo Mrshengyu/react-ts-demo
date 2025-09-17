@@ -7,6 +7,7 @@ import Layout from '@/pages/Layout'
 import Login from '@/pages/Login'
 
 import { Navigate } from 'react-router-dom'
+import { AuthRoute } from "@/components/AuthRoute"
 
 
 export default [
@@ -19,10 +20,10 @@ export default [
                 element: <Message />,
                 children: [
                     {
-                    //  path: 'detail/:id/:title/:content',
-                     path: 'detail',
-                     element: <Detail/>
-                     }
+                        //  path: 'detail/:id/:title/:content',
+                        path: 'detail',
+                        element: <Detail />
+                    }
                 ]
             },
             { path: 'news', element: <News /> }
@@ -35,9 +36,10 @@ export default [
     // { path: '/', element: <Navigate to="/home" /> }
     {
         path: '/',
-        element: <Layout />
+        element: <AuthRoute><Layout /></AuthRoute>
     },
     {
+        //注意死循环
         path: '/login',
         element: <Login />
     }
