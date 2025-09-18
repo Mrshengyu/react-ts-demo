@@ -3,7 +3,7 @@ import { LaptopOutlined, NotificationOutlined, UserOutlined,HomeOutlined,DiffOut
 import { Breadcrumb, Layout, Menu, theme,Popconfirm} from 'antd';
 import { request } from '@/utils'
 import './index.scss'
-import { Outlet,useNavigate } from "react-router-dom";
+import { Outlet,useNavigate, useLocation } from "react-router-dom";
 
 export default function  GeeLayout() {
   // useEffect(() => {
@@ -41,7 +41,13 @@ const onMenuClick = (item) => {
     const path= item.key;
     navigate(path);
 
-  };  
+  }; 
+  
+  // 反向高亮
+  const location = useLocation();
+  // const selectedKeys = location.pathname.split('/')[1] || '/';
+  const selectedKeys = location.pathname|| '/';
+
 
   return (
     <Layout>
@@ -61,7 +67,8 @@ const onMenuClick = (item) => {
           <Menu
             mode="inline"
             theme="dark"
-            defaultSelectedKeys={['1']}
+            // defaultSelectedKeys={['1']}
+            selectedKeys={selectedKeys}
             onClick={onMenuClick}
             items={items}
             style={{ height: '100%', borderRight: 0 }}></Menu>
