@@ -10,7 +10,7 @@ export default function App() {
     }
 
     return (
-        <div>
+        <div style={{height: '100vh'}}>
                 {/* 路由链接 */}
             {/* <ul>
 
@@ -22,10 +22,8 @@ export default function App() {
                 {/* 注册路由*/}
 
 
-            <div>
                     {element}
 
-            </div>
         </div>
     )
 }
