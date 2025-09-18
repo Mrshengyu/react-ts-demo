@@ -44,8 +44,10 @@ export default [
         element: <Layout />,
         children: [
             {
-                path: 'home',
-                element: <Navigate to="home" />
+                // 设置二级子路由默认
+                index: true,
+                // path: 'home',
+                element: <Home />
             },
             {
                 path: 'article',

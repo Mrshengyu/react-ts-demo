@@ -3,7 +3,7 @@ import { LaptopOutlined, NotificationOutlined, UserOutlined,HomeOutlined,DiffOut
 import { Breadcrumb, Layout, Menu, theme,Popconfirm} from 'antd';
 import { request } from '@/utils'
 import './index.scss'
-import { Outlet } from "react-router-dom";
+import { Outlet,useNavigate } from "react-router-dom";
 
 export default function  GeeLayout() {
   // useEffect(() => {
@@ -16,20 +16,32 @@ const { Header, Sider } = Layout
 const items = [
   {
     label: '首页',
-    key: '1',
+    key: '/',
     icon: <HomeOutlined />,
   },
   {
     label: '文章管理',
-    key: '2',
+    key: '/article',
     icon: <DiffOutlined />,
   },
   {
     label: '创建文章',
-    key: '3',
+    key: '/publish',
     icon: <EditOutlined />,
   },
+ 
 ]
+
+
+const navigate = useNavigate()
+
+const onMenuClick = (item) => {
+    console.log(item);
+    // 获取路由地址
+    const path= item.key;
+    navigate(path);
+
+  };  
 
   return (
     <Layout>
@@ -50,6 +62,7 @@ const items = [
             mode="inline"
             theme="dark"
             defaultSelectedKeys={['1']}
+            onClick={onMenuClick}
             items={items}
             style={{ height: '100%', borderRight: 0 }}></Menu>
         </Sider>
