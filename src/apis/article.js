@@ -10,3 +10,12 @@ export function getChannelsAPI() {
 export function getArticlesAPI(params) {
   return request.get('/articles', { params });
 }
+
+// 提交文章表单
+export function createArticleAPI(data) {
+    return request({
+        url: '/mp/articles?draft=false',
+        method: 'post',
+        data
+    })
+}

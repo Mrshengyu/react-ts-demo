@@ -16,7 +16,7 @@ import './index.scss'
 
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
-import { getChannelsAPI } from '@/apis/article'
+import { getChannelsAPI,createArticleAPI } from '@/apis/article'
 import { useState, useEffect } from 'react'
 
 const { Option } = Select
@@ -37,6 +37,23 @@ const Publish = () => {
     //调用函数
     getChannelList()
   }, [])
+  
+  // 提交表单
+  const onFinish = (formValues) => {
+    // console.log(formValues)
+    const { title, channel_id, content } = formValues
+    const reqData={
+      title,
+      content,
+      channel_id,
+      cover:{
+        type:0,
+        image:[]
+      }
+    }
+    //调用接口条
+    // createArticleAPI(reqData)
+  }
   return (
     <div className="publish">
       <Card
@@ -52,6 +69,7 @@ const Publish = () => {
           labelCol={{ span: 4 }}
           wrapperCol={{ span: 16 }}
           initialValues={{ type: 1 }}
+          onFinish={onFinish}
         >
           <Form.Item
             label="标题"
