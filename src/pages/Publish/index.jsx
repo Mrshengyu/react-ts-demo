@@ -122,6 +122,8 @@ const Publish = () => {
                 showUploadList
                 action={'http://geek.itheima.net/v1_0/upload'}
                 onChange={onUploadChange}
+                //控制图片上传数量
+                maxCount={imgType}
               >
                 <div style={{ marginTop: 8 }}>
                   <PlusOutlined />
