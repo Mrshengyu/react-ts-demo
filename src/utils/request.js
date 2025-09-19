@@ -1,6 +1,7 @@
 //axios的封装，统一处理请求
 import axios from 'axios'
-import { getToken } from '@/utils/token'
+import { getToken,removeToken } from '@/utils/token'
+import router from '@/router'
 // 1 域名配置
 const baseURL = 'api'
 // 2 创建axios实例
@@ -28,6 +29,17 @@ request.interceptors.response.use(response => {
   return response.data
 }, error => {
   // 对响应错误做点什么
+  console.dir(error)
+  if (error.response && error.response.status === 401) {
+    // 处理401错误，比如跳转到登录页
+    removeToken();
+    router.navigate('/login')
+    window.location.reload();
+    // window.location.href = '/login'
+    // 或者使用路由库进行跳转
+    // router.push('/login')
+    console.log('Unauthorized, redirecting to login...')
+  }
   return Promise.reject(error)
 })
 // 5 导出请求方法
