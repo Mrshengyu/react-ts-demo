@@ -29,12 +29,19 @@ const userStore = createSlice({
       //   ...state,
       //   userInfo:action.payload
       // }
+    },
+
+    clearUserInfo(state){
+      state.token = "";
+      state.userInfo = {};
+      // localStorage.removeItem("token_key");
+      removeToken();
     }
   },
 }); 
 
 //结构出actionCreater
-const { setToken,setUserInfo } = userStore.actions;
+const { setToken,setUserInfo,clearUserInfo } = userStore.actions;
 //获取reducer函数
 const userReducer = userStore.reducer;
 
@@ -71,5 +78,5 @@ const fetchLogin =(loginForm)=>{
         dispatch(setUserInfo(res.data));
   }
  }
-export {  fetchUserInfo,fetchLogin,setToken };
+export {  fetchUserInfo,fetchLogin,setToken,clearUserInfo };
 export default userReducer;
