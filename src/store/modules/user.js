@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import {request} from "@/utils";
 import {setToken as _setToken,getToken,removeToken} from "@/utils/token"
 import { message } from "antd";
+import { loginAPI, getUserInfoAPI } from "@/apis/user";
 
 const userStore = createSlice({
   name: "user",
@@ -62,7 +63,9 @@ const fetchLogin =(loginForm)=>{
     //     }) 
     // }
     return async (dispatch)=>{
-        const res = await request.post('authorizations',loginForm);
+        // const res = await request.post('authorizations',loginForm);
+        const res = await loginAPI(loginForm);
+
         //提交同步action进行token的存入；
         dispatch(setToken(res.data.token));
     }
@@ -72,6 +75,7 @@ const fetchLogin =(loginForm)=>{
  const fetchUserInfo = () => {
   return async (dispatch) => {
         // const res = await request.get('authorizations',loginForm);
+        // const res= await getUserInfoAPI();
         //提交同步action进行token的存入；
         message.success("模拟获取用户信息成功");
         const res = {data:{name:"zhaoshengyu"}}
