@@ -1,52 +1,62 @@
 import React, { useEffect } from 'react'
-import { LaptopOutlined, NotificationOutlined, UserOutlined,HomeOutlined,DiffOutlined,EditOutlined,LogoutOutlined} from '@ant-design/icons';
-import { Breadcrumb, Layout, Menu, theme,Popconfirm} from 'antd';
+import { LaptopOutlined, NotificationOutlined, UserOutlined, HomeOutlined, DiffOutlined, EditOutlined, LogoutOutlined } from '@ant-design/icons';
+import { Breadcrumb, Layout, Menu, theme, Popconfirm } from 'antd';
 import { request } from '@/utils'
 import './index.scss'
-import { Outlet,useNavigate, useLocation } from "react-router-dom";
-
-export default function  GeeLayout() {
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUserInfo } from '@/store/modules/user';
+export default function GeeLayout() {
   // useEffect(() => {
   //   request.get('/api/test')
   // }, [])
 
-const { Header, Sider } = Layout
+  // 触发个人信息action
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchUserInfo());
+  }, [dispatch])
+
+  const  name= useSelector(state => state.user.userInfo.name);
 
 
-const items = [
-  {
-    label: '首页',
-    key: '/',
-    icon: <HomeOutlined />,
-  },
-  {
-    label: '文章管理',
-    key: '/article',
-    icon: <DiffOutlined />,
-  },
-  {
-    label: '创建文章',
-    key: '/publish',
-    icon: <EditOutlined />,
-  },
- 
-]
+  const { Header, Sider } = Layout
 
 
-const navigate = useNavigate()
+  const items = [
+    {
+      label: '首页',
+      key: '/',
+      icon: <HomeOutlined />,
+    },
+    {
+      label: '文章管理',
+      key: '/article',
+      icon: <DiffOutlined />,
+    },
+    {
+      label: '创建文章',
+      key: '/publish',
+      icon: <EditOutlined />,
+    },
 
-const onMenuClick = (item) => {
+  ]
+
+
+  const navigate = useNavigate()
+
+  const onMenuClick = (item) => {
     console.log(item);
     // 获取路由地址
-    const path= item.key;
+    const path = item.key;
     navigate(path);
 
-  }; 
-  
+  };
+
   // 反向高亮
   const location = useLocation();
   // const selectedKeys = location.pathname.split('/')[1] || '/';
-  const selectedKeys = location.pathname|| '/';
+  const selectedKeys = location.pathname || '/';
 
 
   return (
@@ -54,7 +64,7 @@ const onMenuClick = (item) => {
       <Header className="header">
         <div className="logo" />
         <div className="user-info">
-          <span className="user-name">柴柴老师</span>
+          <span className="user-name">{name}</span>
           <span className="user-logout">
             <Popconfirm title="是否确认退出？" okText="退出" cancelText="取消">
               <LogoutOutlined /> 退出

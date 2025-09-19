@@ -2,6 +2,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {request} from "@/utils";
 import {setToken as _setToken,getToken,removeToken} from "@/utils/token"
+import { message } from "antd";
 
 const userStore = createSlice({
   name: "user",
@@ -9,6 +10,7 @@ const userStore = createSlice({
   initialState: {
     // token:localStorage.getItem("token_key") || "",
     token:getToken() || "",
+    userInfo:{ }
   },
   // 同步方法
   reducers: {
@@ -18,11 +20,21 @@ const userStore = createSlice({
       // localStorage.setItem("token_key", action.payload);
       _setToken(action.payload);
     },
+
+    setUserInfo(state, action) {
+      state.userInfo = action.payload;
+      // state.userInfo = {...state.userInfo,...action.payload};
+      // 正规写法 数据不可变
+      // return{
+      //   ...state,
+      //   userInfo:action.payload
+      // }
+    }
   },
 }); 
 
 //结构出actionCreater
-const { setToken } = userStore.actions;
+const { setToken,setUserInfo } = userStore.actions;
 //获取reducer函数
 const userReducer = userStore.reducer;
 
@@ -48,5 +60,16 @@ const fetchLogin =(loginForm)=>{
         dispatch(setToken(res.data.token));
     }
 }
-export {  fetchLogin,setToken };
+
+ // 获取用户信息的异步方法
+ const fetchUserInfo = () => {
+  return async (dispatch) => {
+        // const res = await request.get('authorizations',loginForm);
+        //提交同步action进行token的存入；
+        message.success("模拟获取用户信息成功");
+        const res = {data:{name:"zhaoshengyu"}}
+        dispatch(setUserInfo(res.data));
+  }
+ }
+export {  fetchUserInfo,fetchLogin,setToken };
 export default userReducer;
