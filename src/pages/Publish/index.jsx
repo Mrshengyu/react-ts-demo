@@ -16,10 +16,27 @@ import './index.scss'
 
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
+import { getChannelsAPI } from '@/apis/article'
+import { useState, useEffect } from 'react'
 
 const { Option } = Select
 
 const Publish = () => {
+  //获取频道列表
+  const [channelList, setChannelList] = useState([])
+
+  useEffect(() => {
+    //获取频道列表
+    const getChannelList = async () => {
+      // const res = await getChannelsAPI();
+    const res={data:[]};
+      res.data.unshift({ id: 0, name: '推荐' }, { id: 1, name: '最新' }, { id: 2, name: '热榜' }, { id: 3, name: '原创' }, { id: 4, name: '视频' }, { id: 5, name: '问答' })
+      setChannelList(res.data)
+    }
+
+    //调用函数
+    getChannelList()
+  }, [])
   return (
     <div className="publish">
       <Card
@@ -49,7 +66,10 @@ const Publish = () => {
             rules={[{ required: true, message: '请选择文章频道' }]}
           >
             <Select placeholder="请选择文章频道" style={{ width: 400 }}>
-              <Option value={0}>推荐</Option>
+
+              {channelList.map(item =>
+                <Option value={item.id} key={item.id}>{item.name}</Option>
+              )}
             </Select>
           </Form.Item>
           <Form.Item
@@ -58,9 +78,9 @@ const Publish = () => {
             rules={[{ required: true, message: '请输入文章内容' }]}
           >
             {/* 富文本编辑器 */}
-            <ReactQuill placeholder="请输入文章内容" 
-            className='publish-quill'
-            theme='snow'
+            <ReactQuill placeholder="请输入文章内容"
+              className='publish-quill'
+              theme='snow'
             />
           </Form.Item>
 
