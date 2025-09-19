@@ -1,7 +1,7 @@
 // 用户相关请求
 import { request } from "@/utils";
 // 1 登陆请求
-export function loginAPI(formaData) {
+export function loginAPI(formData) {
     return request({
         // url: "/login",
         method:'POST',
