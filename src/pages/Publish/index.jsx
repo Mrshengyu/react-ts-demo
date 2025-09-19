@@ -16,7 +16,7 @@ import './index.scss'
 
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
-import { getChannelsAPI,createArticleAPI } from '@/apis/article'
+import { getChannelsAPI, createArticleAPI } from '@/apis/article'
 import { useState, useEffect } from 'react'
 
 const { Option } = Select
@@ -29,7 +29,7 @@ const Publish = () => {
     //获取频道列表
     const getChannelList = async () => {
       // const res = await getChannelsAPI();
-    const res={data:[]};
+      const res = { data: [] };
       res.data.unshift({ id: 0, name: '推荐' }, { id: 1, name: '最新' }, { id: 2, name: '热榜' }, { id: 3, name: '原创' }, { id: 4, name: '视频' }, { id: 5, name: '问答' })
       setChannelList(res.data)
     }
@@ -37,22 +37,28 @@ const Publish = () => {
     //调用函数
     getChannelList()
   }, [])
-  
+
   // 提交表单
   const onFinish = (formValues) => {
     // console.log(formValues)
     const { title, channel_id, content } = formValues
-    const reqData={
+    const reqData = {
       title,
       content,
       channel_id,
-      cover:{
-        type:0,
-        image:[]
+      cover: {
+        type: 0,
+        image: []
       }
     }
     //调用接口条
     // createArticleAPI(reqData)
+  }
+
+  // 上传图片
+  const [imageList, setImageList] = useState([])
+  const onUploadChange = (info) => {
+    setImageList(info.fileList)
   }
   return (
     <div className="publish">
@@ -89,6 +95,31 @@ const Publish = () => {
                 <Option value={item.id} key={item.id}>{item.name}</Option>
               )}
             </Select>
+          </Form.Item>
+          <Form.Item label="封面">
+            <Form.Item name="type">
+              <Radio.Group>
+                <Radio value={1}>单图</Radio>
+                <Radio value={3}>三图</Radio>
+                <Radio value={0}>无图</Radio>
+              </Radio.Group>
+            </Form.Item>
+
+            {/* 
+            listType: 选择文件框样式
+            showUploadList: 是否显示文件列表
+            */}
+            <Upload
+            name='image'
+              listType="picture-card"
+              showUploadList
+              action={'http://geek.itheima.net/v1_0/upload'}
+              onChange={onUploadChange}
+            >
+              <div style={{ marginTop: 8 }}>
+                <PlusOutlined />
+              </div>
+            </Upload>
           </Form.Item>
           <Form.Item
             label="内容"
