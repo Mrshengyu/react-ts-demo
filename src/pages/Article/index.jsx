@@ -1,4 +1,4 @@
-import React, {useState, useEffect}from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Card, Breadcrumb, Form, Button, Radio, DatePicker, Select } from 'antd'
 import locale from 'antd/es/date-picker/locale/zh_CN'
@@ -7,7 +7,7 @@ import { Table, Tag, Space } from 'antd'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import img404 from '@/assets/images/error.png'
 import { useChannel } from '@/hooks/useChannel'
-import {getArticleListAPI} from '@/apis/article'
+import { getArticleListAPI } from '@/apis/article'
 
 
 const { Option } = Select
@@ -20,8 +20,8 @@ const Article = () => {
 
   // 表格状态枚举
   const statusEnum = {
-    1:<Tag color="green">审核通过</Tag>,
-    2:<Tag color="warning">审核中</Tag>
+    1: <Tag color="green">审核通过</Tag>,
+    2: <Tag color="warning">审核中</Tag>
   }
 
 
@@ -43,7 +43,7 @@ const Article = () => {
     {
       title: '状态',
       dataIndex: 'status',
-      render: data =>statusEnum[data] 
+      render: data => statusEnum[data]
     },
     {
       title: '发布时间',
@@ -121,39 +121,47 @@ const Article = () => {
 
   // 获取文章列表
   const [articleList, setArticleList] = useState([])
-  
+
   // 筛选功能
-  const [reqData, setReqData]=useState(
-    { status:'', channel_id:0, begin_pubdate:'', end_pubdate:'',page:1, per_page:1 }
+  const [reqData, setReqData] = useState(
+    { status: '', channel_id: 0, begin_pubdate: '', end_pubdate: '', page: 1, per_page: 1 }
   )
   useEffect(() => {
     // getArticleListAPI({}).then(res => {
     //   setArticleList(res.data.list)
     // })
-    async function getList(){
+    async function getList() {
       // const res= await getArticleListAPI(reqData);
       setArticleList(listData)
     }
     getList()
-  }, [reqdata])
+  }, [reqData])
 
 
   // 获取筛选数据
-  const onFinish =(formValues) => {
+  const onFinish = (formValues) => {
     // 收集表单数据，并且是不可变的
     console.log(formValues)
     setReqData({
       ...reqData,
-      channel_id:formValues.channel_id,
-      status:formValues.status,
-      begin_pubdate:formValues.date[0].format('YYYY-MM-DD'),
-      end_pubdate:formValues.date[1].format('YYYY-MM-DD'), 
+      channel_id: formValues.channel_id,
+      status: formValues.status,
+      begin_pubdate: formValues.date[0].format('YYYY-MM-DD'),
+      end_pubdate: formValues.date[1].format('YYYY-MM-DD'),
     })
   }
 
   // 重新拉取文章列表，渲染table逻辑，--敷用
   // 通过 useEffect 监听 reqData 的变化，重新拉取文章列表，渲染table
 
+  // 获取频道列表
+  const onPageChange = (page, pageSize) => {
+    setReqData({
+      ...reqData,
+      page,
+      // per_page: pageSize
+    })
+  }
 
   return (
     <div>
@@ -203,7 +211,11 @@ const Article = () => {
 
       {/* 表格区域 */}
       <Card title={`根据筛选条件共查询到 ${articleList.length}条结果：`}>
-        <Table rowKey="id" columns={columns} dataSource={articleList} />
+        <Table rowKey="id" columns={columns} dataSource={articleList} 
+        pagination={{ total: reqData.length, pageSize: reqData.per_page,
+          onChange:onPageChange
+         }} 
+        />
       </Card>
     </div>
   )
