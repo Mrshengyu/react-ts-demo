@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect}from 'react'
 import { Link } from 'react-router-dom'
 import { Card, Breadcrumb, Form, Button, Radio, DatePicker, Select } from 'antd'
 import locale from 'antd/es/date-picker/locale/zh_CN'
@@ -7,6 +7,7 @@ import { Table, Tag, Space } from 'antd'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import img404 from '@/assets/images/error.png'
 import { useChannel } from '@/hooks/useChannel'
+import {getArticleListAPI} from '@/apis/article'
 
 
 const { Option } = Select
@@ -16,6 +17,12 @@ const { RangePicker } = DatePicker
 const Article = () => {
   //获取频道列表
   const { channelList } = useChannel();
+
+  // 表格状态枚举
+  const statusEnum = {
+    1:<Tag color="green">审核通过</Tag>,
+    2:<Tag color="warning">审核中</Tag>
+  }
 
 
   // 准备列数据
@@ -36,7 +43,7 @@ const Article = () => {
     {
       title: '状态',
       dataIndex: 'status',
-      render: data => <Tag color="green">审核通过</Tag>
+      render: data =>statusEnum[data] 
     },
     {
       title: '发布时间',
@@ -72,7 +79,7 @@ const Article = () => {
     }
   ]
   // 准备表格body数据
-  const data = [
+  const listData = [
     {
       id: '8218',
       comment_count: 0,
@@ -84,8 +91,46 @@ const Article = () => {
       read_count: 2,
       status: 2,
       title: 'wkwebview离线化加载h5资源解决方案'
-    }
+    },
+    {
+      id: '8219',
+      comment_count: 0,
+      cover: {
+        images: [],
+      },
+      like_count: 0,
+      pubdate: '2019-03-11 01:00:00',
+      read_count: 2,
+      status: 1,
+      title: 'react资源解决方案'
+    },
+    {
+      id: '8220',
+      comment_count: 0,
+      cover: {
+        images: [],
+      },
+      like_count: 0,
+      pubdate: '2019-03-11 03:00:00',
+      read_count: 2,
+      status: 2,
+      title: 'wkwebview资源解决方案'
+    },
+
   ]
+
+  // 获取文章列表
+  const [articleList, setArticleList] = useState([])
+  useEffect(() => {
+    // getArticleListAPI({}).then(res => {
+    //   setArticleList(res.data.list)
+    // })
+    async function getList(){
+      // const res= await getArticleListAPI();
+      setArticleList(listData)
+    }
+    getList()
+  }, [])
   return (
     <div>
       <Card
@@ -133,8 +178,8 @@ const Article = () => {
       </Card>
 
       {/* 表格区域 */}
-      <Card title={`根据筛选条件共查询到 count 条结果：`}>
-        <Table rowKey="id" columns={columns} dataSource={data} />
+      <Card title={`根据筛选条件共查询到 ${articleList.length}条结果：`}>
+        <Table rowKey="id" columns={columns} dataSource={articleList} />
       </Card>
     </div>
   )
