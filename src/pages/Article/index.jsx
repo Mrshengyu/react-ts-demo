@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Card, Breadcrumb, Form, Button, Radio, DatePicker, Select } from 'antd'
+import { Card, Breadcrumb, Form, Button, Radio, DatePicker, Select,Popconfirm,message  } from 'antd'
 import locale from 'antd/es/date-picker/locale/zh_CN'
 
 import { Table, Tag, Space } from 'antd'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import img404 from '@/assets/images/error.png'
 import { useChannel } from '@/hooks/useChannel'
-import { getArticleListAPI } from '@/apis/article'
+import { getArticleListAPI,deleteArticleAPI } from '@/apis/article'
 
 
 const { Option } = Select
@@ -67,12 +67,15 @@ const Article = () => {
         return (
           <Space size="middle">
             <Button type="primary" shape="circle" icon={<EditOutlined />} />
-            <Button
-              type="primary"
-              danger
-              shape="circle"
-              icon={<DeleteOutlined />}
-            />
+            <Popconfirm title="删除文章？" description="确认要删除当前文章莫" okText="确认" cancelText="取消" onConfirm={()=>onConfirm(data)}>
+              <Button
+                type="primary"
+                danger
+                shape="circle"
+                icon={<DeleteOutlined />}
+              />
+            </Popconfirm>
+
           </Space>
         )
       }
@@ -130,8 +133,11 @@ const Article = () => {
     // getArticleListAPI({}).then(res => {
     //   setArticleList(res.data.list)
     // })
+    
     async function getList() {
+      debugger;
       // const res= await getArticleListAPI(reqData);
+      // articleList=listData;
       setArticleList(listData)
     }
     getList()
@@ -161,6 +167,16 @@ const Article = () => {
       page,
       // per_page: pageSize
     })
+  }
+
+  // 删除文章
+  const onConfirm = async(data) => {
+    // await deleteArticleAPI(data.id);
+   const newList = listData.filter(item => item.id !== data.id)
+   listData.splice(listData.findIndex(item => item.id === data.id), 1);
+   setArticleList(newList);
+    message.success('删除文章')
+    // setReqData({...reqData})
   }
 
   return (
@@ -211,10 +227,11 @@ const Article = () => {
 
       {/* 表格区域 */}
       <Card title={`根据筛选条件共查询到 ${articleList.length}条结果：`}>
-        <Table rowKey="id" columns={columns} dataSource={articleList} 
-        pagination={{ total: reqData.length, pageSize: reqData.per_page,
-          onChange:onPageChange
-         }} 
+        <Table rowKey="id" columns={columns} dataSource={articleList}
+          pagination={{
+            total: reqData.length, pageSize: reqData.per_page,
+            onChange: onPageChange
+          }}
         />
       </Card>
     </div>
