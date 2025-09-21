@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link,useNavigate } from 'react-router-dom'
 import { Card, Breadcrumb, Form, Button, Radio, DatePicker, Select,Popconfirm,message  } from 'antd'
 import locale from 'antd/es/date-picker/locale/zh_CN'
 
@@ -8,6 +8,7 @@ import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import img404 from '@/assets/images/error.png'
 import { useChannel } from '@/hooks/useChannel'
 import { getArticleListAPI,deleteArticleAPI } from '@/apis/article'
+import { type } from '@testing-library/user-event/dist/type'
 
 
 const { Option } = Select
@@ -66,7 +67,7 @@ const Article = () => {
       render: data => {
         return (
           <Space size="middle">
-            <Button type="primary" shape="circle" icon={<EditOutlined />} />
+            <Button type="primary" shape="circle" icon={<EditOutlined />} onClick={()=>orderPublish(data)}/>
             <Popconfirm title="删除文章？" description="确认要删除当前文章莫" okText="确认" cancelText="取消" onConfirm={()=>onConfirm(data)}>
               <Button
                 type="primary"
@@ -85,39 +86,45 @@ const Article = () => {
   const listData = [
     {
       id: '8218',
-      comment_count: 0,
+      channel_id: 0,
       cover: {
+        type:1,
         images: [],
       },
       like_count: 0,
       pubdate: '2019-03-11 09:00:00',
       read_count: 2,
       status: 2,
-      title: 'wkwebview离线化加载h5资源解决方案'
+      title: 'wkwebview离线化加载h5资源解决方案',
+      content:'无'
     },
     {
       id: '8219',
-      comment_count: 0,
+      channel_id: 1,
       cover: {
         images: [],
+        type:0
       },
       like_count: 0,
       pubdate: '2019-03-11 01:00:00',
       read_count: 2,
       status: 1,
-      title: 'react资源解决方案'
+      title: 'react资源解决方案',
+      content:'无1'
     },
     {
       id: '8220',
-      comment_count: 0,
+      channel_id: 2,
       cover: {
+        type:3,
         images: [],
       },
       like_count: 0,
       pubdate: '2019-03-11 03:00:00',
       read_count: 2,
       status: 2,
-      title: 'wkwebview资源解决方案'
+      title: 'wkwebview资源解决方案',
+      content:'无2'
     },
 
   ]
@@ -135,7 +142,6 @@ const Article = () => {
     // })
     
     async function getList() {
-      debugger;
       // const res= await getArticleListAPI(reqData);
       // articleList=listData;
       setArticleList(listData)
@@ -177,6 +183,15 @@ const Article = () => {
    setArticleList(newList);
     message.success('删除文章')
     // setReqData({...reqData})
+  }
+
+  //路由跳转
+  const navigate = useNavigate();
+  // 跳转到目标详情页
+  const orderPublish = (data) => {
+    debugger
+    const obj=data;
+    navigate('/publish', { state: obj });
   }
 
   return (

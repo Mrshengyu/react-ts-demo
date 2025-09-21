@@ -12,18 +12,21 @@ import {
   message
 } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
-import { Link } from 'react-router-dom'
+import { Link,useLocation } from 'react-router-dom'
 import './index.scss'
 
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
-import { createArticleAPI } from '@/apis/article'
+import { createArticleAPI,getArticleDetailAPI } from '@/apis/article'
 import { useState, useEffect } from 'react'
 import { useChannel } from '@/hooks/useChannel'
 
 const { Option } = Select
 
+
 const Publish = () => {
+const [form] = Form.useForm();
+
   //获取频道列表
   const { channelList } = useChannel();
   // 提交表单
@@ -59,6 +62,26 @@ const Publish = () => {
   const onTypeChange = (e) => {
     setImgType(e.target.value)
   }
+    const location  = useLocation();
+
+  // 详情展示
+  useEffect(() => {
+    // getArticleDetailAPI(location.state.id)
+    console.log(location.state)
+    if(location.state===null) return;
+    const state = location.state;
+    form.setFieldsValue({...state,...{type:state.cover.type}})
+    setImgType(state.cover.type)
+    // setImageList(state.cover.images.map(item => ({
+    //   uid: -1,
+    //   name: item,
+    //   status: 'done',
+    //   url: item
+    // })))
+    // setImgType(0)
+  }, [location.state,form])
+
+  //获取实例
   return (
     <div className="publish">
       <Card
@@ -75,6 +98,7 @@ const Publish = () => {
           wrapperCol={{ span: 16 }}
           initialValues={{ type: 0 }}
           onFinish={onFinish}
+          form={form}
         >
           <Form.Item
             label="标题"
