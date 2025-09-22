@@ -45,3 +45,12 @@ export function getArticleDetailAPI(id) {
     method: 'GET',
   });
 }
+
+//更新文章
+export function updateArticleAPI(data) {
+  return request({
+    url: `/mp/articles/${data.id}?draft=false`,
+    method: 'PUT',
+    data
+  });
+}

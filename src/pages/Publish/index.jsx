@@ -12,12 +12,12 @@ import {
   message
 } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
-import { Link,useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import './index.scss'
 
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
-import { createArticleAPI,getArticleDetailAPI } from '@/apis/article'
+import { createArticleAPI, getArticleDetailAPI,updateArticleAPI } from '@/apis/article'
 import { useState, useEffect } from 'react'
 import { useChannel } from '@/hooks/useChannel'
 
@@ -25,7 +25,9 @@ const { Option } = Select
 
 
 const Publish = () => {
-const [form] = Form.useForm();
+  // 文章id
+  const articleId = useLocation().state?.id || null;
+  const [form] = Form.useForm();
 
   //获取频道列表
   const { channelList } = useChannel();
@@ -45,11 +47,22 @@ const [form] = Form.useForm();
       cover: {
         type: imgType, // 1:单图 3:三图 0:无图 封面模式
         // images: []
-        images: imageList.map(item => item.response.data.url) //图片列表
+        //图片列表
+        images: imageList.map(item => {
+          if (item.response) {
+            return item.response.data.url
+          } else {
+            return item.url
+          }
+        })
       }
     }
     //调用接口条
+    if (articleId) {
+      // updateArticleAPI({...reqData,id:articleId})
+    }else{
     // createArticleAPI(reqData)
+    }
   }
 
   // 上传图片
@@ -62,15 +75,17 @@ const [form] = Form.useForm();
   const onTypeChange = (e) => {
     setImgType(e.target.value)
   }
-    const location  = useLocation();
+  const location = useLocation();
 
   // 详情展示
   useEffect(() => {
-    // getArticleDetailAPI(location.state.id)
+    if (articleId) {
+      // getArticleDetailAPI(location.state.id)
+    }
     console.log(location.state)
-    if(location.state===null) return;
+    if (location.state === null) return;
     const state = location.state;
-    form.setFieldsValue({...state,...{type:state.cover.type}})
+    form.setFieldsValue({ ...state, ...{ type: state.cover.type } })
     setImgType(state.cover.type)
     // setImageList(state.cover.images.map(item => ({
     //   uid: -1,
@@ -79,7 +94,7 @@ const [form] = Form.useForm();
     //   url: item
     // })))
     // setImgType(0)
-  }, [location.state,form])
+  }, [location.state, form])
 
   //获取实例
   return (
@@ -88,7 +103,7 @@ const [form] = Form.useForm();
         title={
           <Breadcrumb items={[
             { title: <Link to={'/'}>首页</Link> },
-            { title: '发布文章' },
+            { title: `${articleId ? '编辑' : '发布'}文章 ` }
           ]}
           />
         }
